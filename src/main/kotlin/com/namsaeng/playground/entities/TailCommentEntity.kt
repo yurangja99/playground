@@ -10,5 +10,5 @@ class TailCommentEntity(
         @Column(name="comment_id") var commentId: Long,
         @Column(name="content") var content: String,
         @Column(name="created") var created: Date = Date(),
-        @Id @GeneratedValue(strategy= GenerationType.IDENTITY) var id: Long = 0
+        @Id @GeneratedValue(strategy=GenerationType.IDENTITY) var id: Long = 0
 )

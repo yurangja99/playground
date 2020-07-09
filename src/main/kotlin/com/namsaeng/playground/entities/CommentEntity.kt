@@ -11,5 +11,5 @@ class CommentEntity(
         @Column(name="like_cnt") var like: Int,
         @Column(name="content") var content: String,
         @Column(name="created") var created: Date = Date(),
-        @Id @GeneratedValue(strategy= GenerationType.IDENTITY) var id: Long = 0
+        @Id @GeneratedValue(strategy=GenerationType.IDENTITY) var id: Long = 0
 )

@@ -10,5 +10,5 @@ class TopicEntity(
         @Column(name="title") var title: String,
         @Column(name="content") var content: String,
         @Column(name="created") var created: Date = Date(),
-        @Id @GeneratedValue(strategy= GenerationType.IDENTITY) var id: Int = 0
+        @Id @GeneratedValue(strategy=GenerationType.IDENTITY) var id: Int = 0
 )

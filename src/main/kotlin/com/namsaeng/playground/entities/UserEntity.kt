@@ -14,5 +14,5 @@ class UserEntity(
         @Column(name="name") var name: String,
         @Column(name="category") var category: String,
         @Column(name="created") var created: Date = Date(),
-        @Id @GeneratedValue(strategy= GenerationType.IDENTITY) var id: Int = 0
+        @Id @GeneratedValue(strategy=GenerationType.IDENTITY) var id: Int = 0
 )
