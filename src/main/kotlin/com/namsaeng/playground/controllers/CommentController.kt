@@ -13,6 +13,7 @@ class CommentController {
     // CREATE
 
     // 새로운 의견 댓글 생성
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @PostMapping("/comment")
     fun createComment(@RequestBody comment: HashMap<String, Any>): HashMap<String, Any?> {
         return try {
@@ -32,6 +33,7 @@ class CommentController {
     // READ
 
     // comment DB 전체를 반환
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @GetMapping("/db/comment")
     fun readCommentDB(): HashMap<String, Any?> {
         return try {
@@ -44,6 +46,7 @@ class CommentController {
     }
 
     // 특정 의견 댓글 정보 열람
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @GetMapping("/comment")
     fun readComment(id: Long): HashMap<String, Any?> {
         return try {
@@ -59,6 +62,7 @@ class CommentController {
 
     // 의견 댓글 정보 변경
     // userId?, topicId?, like?, content?
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @PatchMapping("/comment")
     fun updateComment(id: Long, @RequestBody newComment: HashMap<String, Any>): HashMap<String, Any?> {
         return try {
@@ -82,6 +86,7 @@ class CommentController {
     // DELETE
 
     // 기존의 의견 댓글 제거.
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @DeleteMapping("/comment")
     fun deleteComment(id: Long): HashMap<String, Any?> {
         return try {

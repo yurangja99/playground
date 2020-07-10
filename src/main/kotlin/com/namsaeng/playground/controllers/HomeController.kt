@@ -1,5 +1,6 @@
 package com.namsaeng.playground.controllers
 
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -53,6 +54,7 @@ class HomeController {
     )
 
     // API 문서 출력
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @GetMapping("/")
     fun root(): String {
         return "<title>API Document</title><h2>API Document</h2>" +
@@ -60,12 +62,14 @@ class HomeController {
     }
 
     // 웹 서비스 설명 글
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @GetMapping("/introduction")
     fun introduction(): String {
         return "이 사이트는 좋은 사이트입니다."
     }
 
     // 개인정보처리방침
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @GetMapping("/infopolicy")
     fun infoPolicy(): String {
         return "웹 서비스 유저의 정보는 사용하지 않을 것입니다."

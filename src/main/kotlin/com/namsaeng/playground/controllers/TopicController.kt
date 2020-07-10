@@ -13,6 +13,7 @@ class TopicController {
     // CREATE
 
     // 새로운 주제 생성
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @PostMapping("/topic")
     fun createTopic(@RequestBody topic: HashMap<String, Any>): HashMap<String, Any?> {
         return try {
@@ -32,6 +33,7 @@ class TopicController {
     // READ
 
     // topic DB 전체를 반환
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @GetMapping("/db/topic")
     fun readTopicDB(): HashMap<String, Any?> {
         return try {
@@ -44,6 +46,7 @@ class TopicController {
     }
 
     // 특정 주제 정보 열람
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @GetMapping("/topic")
     fun readTopic(id: Int): HashMap<String, Any?> {
         return try {
@@ -56,6 +59,7 @@ class TopicController {
     }
 
     // 토론 주제 목록의 반환
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @GetMapping("/titles")
     fun readTitles(): HashMap<String, Any?> {
         return try {
@@ -73,6 +77,7 @@ class TopicController {
 
     // 주제 정보 변경
     // userId?, title?, content?
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @PatchMapping("/topic")
     fun updateTopic(id: Int, @RequestBody newTopic: HashMap<String, Any>): HashMap<String, Any?> {
         return try {
@@ -95,6 +100,7 @@ class TopicController {
     // DELETE
 
     // 기존의 주제 제거
+    @CrossOrigin(origins= ["http://localhost:3000"])
     @DeleteMapping("/topic")
     fun deleteTopic(id: Int): HashMap<String, Any?> {
         return try {
