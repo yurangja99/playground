@@ -11,17 +11,7 @@ class UserController {
     @Autowired
     lateinit var userRepository: UserRepository
 
-    // user DB 전체를 반환
-    @GetMapping("/db/user")
-    fun readUserDB(): HashMap<String, Any?> {
-        return try {
-            val allUserRecords: Iterable<UserEntity> = userRepository.findAll()
-            hashMapOf(Pair("data", allUserRecords))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            hashMapOf(Pair("data", e.message))
-        }
-    }
+    // CREATE
 
     // 새로운 유저 생성
     @PostMapping("/user")
@@ -37,7 +27,21 @@ class UserController {
                     user["category"] as String
             )
             val resultOfSave = userRepository.save(userAsUserEntity)
-            hashMapOf(Pair("data", resultOfSave.id))
+            hashMapOf(Pair("data", resultOfSave))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            hashMapOf(Pair("data", e.message))
+        }
+    }
+
+    // READ
+
+    // user DB 전체를 반환
+    @GetMapping("/db/user")
+    fun readUserDB(): HashMap<String, Any?> {
+        return try {
+            val allUserRecords: Iterable<UserEntity> = userRepository.findAll()
+            hashMapOf(Pair("data", allUserRecords))
         } catch (e: Exception) {
             e.printStackTrace()
             hashMapOf(Pair("data", e.message))
@@ -56,6 +60,8 @@ class UserController {
         }
     }
 
+    // UPDATE
+
     // 유저 정보 변경
     // state?, school?, grade?, class?, number?, name?, category?
     @PatchMapping("/user")
@@ -73,13 +79,15 @@ class UserController {
                 userRepository.save(userWillBeUpdated)
                 hashMapOf(Pair("data", userWillBeUpdated))
             } else {
-                hashMapOf(Pair("data", -1))
+                hashMapOf(Pair("data", null))
             }
         } catch (e: Exception) {
             e.printStackTrace()
             hashMapOf(Pair("data", e.message))
         }
     }
+
+    //DELETE
 
     // 기존의 유저 제거
     @DeleteMapping("/user")
@@ -90,7 +98,7 @@ class UserController {
                 userRepository.delete(userWillBeDeleted)
                 hashMapOf(Pair("data", id))
             } else {
-                hashMapOf(Pair("data", -1))
+                hashMapOf(Pair("data", null))
             }
         } catch (e: Exception) {
             e.printStackTrace()

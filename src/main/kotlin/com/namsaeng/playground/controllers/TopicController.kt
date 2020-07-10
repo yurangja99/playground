@@ -10,17 +10,7 @@ class TopicController {
     @Autowired
     lateinit var topicRepository: TopicRepository
 
-    // topic DB 전체를 반환
-    @GetMapping("/db/topic")
-    fun readTopicDB(): HashMap<String, Any?> {
-        return try {
-            val allTopicRecords: Iterable<TopicEntity> = topicRepository.findAll()
-            hashMapOf(Pair("data", allTopicRecords))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            hashMapOf(Pair("data", e.message))
-        }
-    }
+    // CREATE
 
     // 새로운 주제 생성
     @PostMapping("/topic")
@@ -32,7 +22,21 @@ class TopicController {
                     topic["content"] as String
             )
             val resultOfSave = topicRepository.save(topicAsTopicEntity)
-            hashMapOf(Pair("data", resultOfSave.id))
+            hashMapOf(Pair("data", resultOfSave))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            hashMapOf(Pair("data", e.message))
+        }
+    }
+
+    // READ
+
+    // topic DB 전체를 반환
+    @GetMapping("/db/topic")
+    fun readTopicDB(): HashMap<String, Any?> {
+        return try {
+            val allTopicRecords: Iterable<TopicEntity> = topicRepository.findAll()
+            hashMapOf(Pair("data", allTopicRecords))
         } catch (e: Exception) {
             e.printStackTrace()
             hashMapOf(Pair("data", e.message))
@@ -51,6 +55,22 @@ class TopicController {
         }
     }
 
+    // 토론 주제 목록의 반환
+    @GetMapping("/titles")
+    fun readTitles(): HashMap<String, Any?> {
+        return try {
+            val idsAndTitles: Iterable<Array<Any>> = topicRepository.findTitlesAndCreated()
+            val idsAndTitlesJson: Iterable<HashMap<String, Any>> =
+                    idsAndTitles.map { hashMapOf(Pair("id", it[0]), Pair("title", it[1]), Pair("created", it[2]))}
+            hashMapOf(Pair("data", idsAndTitlesJson))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            hashMapOf(Pair("data", e.message))
+        }
+    }
+
+    // UPDATE
+
     // 주제 정보 변경
     // userId?, title?, content?
     @PatchMapping("/topic")
@@ -64,13 +84,15 @@ class TopicController {
                 topicRepository.save(topicWillBeUpdated)
                 hashMapOf(Pair("data", topicWillBeUpdated))
             } else {
-                hashMapOf(Pair("data", -1))
+                hashMapOf(Pair("data", null))
             }
         } catch (e: Exception) {
             e.printStackTrace()
             hashMapOf(Pair("data", e.message))
         }
     }
+
+    // DELETE
 
     // 기존의 주제 제거
     @DeleteMapping("/topic")
@@ -81,22 +103,8 @@ class TopicController {
                 topicRepository.delete(topicWillBeDeleted)
                 hashMapOf(Pair("data", id))
             } else {
-                hashMapOf(Pair("data", -1))
+                hashMapOf(Pair("data", null))
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            hashMapOf(Pair("data", e.message))
-        }
-    }
-
-    // 토론 주제 목록의 반환
-    @GetMapping("/titles")
-    fun readTitles(): HashMap<String, Any?> {
-        return try {
-            val idsAndTitles: Iterable<Array<Any>> = topicRepository.findTitlesAndCreated()
-            val idsAndTitlesJson: Iterable<HashMap<String, Any>> =
-                    idsAndTitles.map { hashMapOf(Pair("id", it[0]), Pair("title", it[1]), Pair("created", it[2]))}
-            hashMapOf(Pair("data", idsAndTitlesJson))
         } catch (e: Exception) {
             e.printStackTrace()
             hashMapOf(Pair("data", e.message))

@@ -10,17 +10,7 @@ class CommentController {
     @Autowired
     lateinit var commentRepository: CommentRepository
 
-    // comment DB 전체를 반환
-    @GetMapping("/db/comment")
-    fun readCommentDB(): HashMap<String, Any?> {
-        return try {
-            val allCommentRecords: Iterable<CommentEntity> = commentRepository.findAll()
-            hashMapOf(Pair("data", allCommentRecords))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            hashMapOf(Pair("data", e.message))
-        }
-    }
+    // CREATE
 
     // 새로운 의견 댓글 생성
     @PostMapping("/comment")
@@ -32,7 +22,21 @@ class CommentController {
                     comment["content"] as String
             )
             val resultOfSave = commentRepository.save(commentAsCommentEntity)
-            hashMapOf(Pair("data", resultOfSave.id))
+            hashMapOf(Pair("data", resultOfSave))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            hashMapOf(Pair("data", e.message))
+        }
+    }
+
+    // READ
+
+    // comment DB 전체를 반환
+    @GetMapping("/db/comment")
+    fun readCommentDB(): HashMap<String, Any?> {
+        return try {
+            val allCommentRecords: Iterable<CommentEntity> = commentRepository.findAll()
+            hashMapOf(Pair("data", allCommentRecords))
         } catch (e: Exception) {
             e.printStackTrace()
             hashMapOf(Pair("data", e.message))
@@ -51,6 +55,8 @@ class CommentController {
         }
     }
 
+    // UPDATE
+
     // 의견 댓글 정보 변경
     // userId?, topicId?, like?, content?
     @PatchMapping("/comment")
@@ -65,13 +71,15 @@ class CommentController {
                 commentRepository.save(commentWillBeUpdated)
                 hashMapOf(Pair("data", commentWillBeUpdated))
             } else {
-                hashMapOf(Pair("data", -1))
+                hashMapOf(Pair("data", null))
             }
         } catch (e: Exception) {
             e.printStackTrace()
             hashMapOf(Pair("data", e.message))
         }
     }
+
+    // DELETE
 
     // 기존의 의견 댓글 제거.
     @DeleteMapping("/comment")
@@ -82,7 +90,7 @@ class CommentController {
                 commentRepository.delete(commentWillBeDeleted)
                 hashMapOf(Pair("data", id))
             } else {
-                hashMapOf(Pair("data", -1))
+                hashMapOf(Pair("data", null))
             }
         } catch (e: Exception) {
             e.printStackTrace()

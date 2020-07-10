@@ -16,17 +16,7 @@ class TailCommentController {
         else commentId as Long
     }
 
-    // tail_comment DB 전체를 반환
-    @GetMapping("/db/tailcomment")
-    fun readTailCommentDB(): HashMap<String, Any?> {
-        return try {
-            val allTailCommentRecords: Iterable<TailCommentEntity> = tailCommentRepository.findAll()
-            hashMapOf(Pair("data", allTailCommentRecords))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            hashMapOf(Pair("data", e.message))
-        }
-    }
+    // CREATE
 
     // 새로운 답글 생성
     @PostMapping("/tailcomment")
@@ -38,7 +28,21 @@ class TailCommentController {
                     tailcomment["content"] as String
             )
             val resultOfSave = tailCommentRepository.save(tailCommentAsTailCommentEntity)
-            hashMapOf(Pair("data", resultOfSave.id))
+            hashMapOf(Pair("data", resultOfSave))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            hashMapOf(Pair("data", e.message))
+        }
+    }
+
+    // READ
+
+    // tail_comment DB 전체를 반환
+    @GetMapping("/db/tailcomment")
+    fun readTailCommentDB(): HashMap<String, Any?> {
+        return try {
+            val allTailCommentRecords: Iterable<TailCommentEntity> = tailCommentRepository.findAll()
+            hashMapOf(Pair("data", allTailCommentRecords))
         } catch (e: Exception) {
             e.printStackTrace()
             hashMapOf(Pair("data", e.message))
@@ -57,6 +61,8 @@ class TailCommentController {
         }
     }
 
+    // UPDATE
+
     // 답글 정보 변경
     // userId?, commentId?, content?
     @PatchMapping("/tailcomment")
@@ -70,13 +76,15 @@ class TailCommentController {
                 tailCommentRepository.save(tailCommentWillBeUpdated)
                 hashMapOf(Pair("data", tailCommentWillBeUpdated))
             } else {
-                hashMapOf(Pair("data", -1))
+                hashMapOf(Pair("data", null))
             }
         } catch (e: Exception) {
             e.printStackTrace()
             hashMapOf(Pair("data", e.message))
         }
     }
+
+    // DELETE
 
     // 기존의 답글 제거
     @DeleteMapping("/tailcomment")
@@ -87,7 +95,7 @@ class TailCommentController {
                 tailCommentRepository.delete(tailCommentWillBeDeleted)
                 hashMapOf(Pair("data", id))
             } else {
-                hashMapOf(Pair("data", -1))
+                hashMapOf(Pair("data", null))
             }
         } catch (e: Exception) {
             e.printStackTrace()
