@@ -5,7 +5,14 @@
 - mustache
 - mysql driver
 
+
+# 추가된 의존성
+implementation("io.springfox:springfox-swagger2:2.6.1")
+implementation("io.springfox:springfox-swagger-ui:2.6.1")
+
+
 # 테스트 방법
+- /src/main/resources/application.properties에서 MySQL username과 password 값을 변경한다.
 - MySQL을 설치한 후, mysql -uroot -p 명령어를 통하여 접속이 되는지 확인한다.
 - 로컬 MySQL 서버에 접속한 후, show databases; 명령어롤 통해 playground 데이터베이스가 없다는 것을 확인한다.
 - playground 데이터베이스가 없음을 확인한 후, MySQL data/DB예시데이터.txt 속 쿼리들을 그대로 입력한다.
