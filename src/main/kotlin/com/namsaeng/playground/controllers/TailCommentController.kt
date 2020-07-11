@@ -73,7 +73,7 @@ class TailCommentController {
     @GetMapping("/tailcomments")
     fun readTailComments(commentId: Long): HashMap<String, Any?> {
         return try{
-            val tailCommentsOfTopic = tailCommentRepository.findByCommentId(commentId).map {it as HashMap<String, Any?>}
+            val tailCommentsOfTopic = tailCommentRepository.findByCommentId(commentId)
             return hashMapOf(Pair("data", tailCommentsOfTopic))
         } catch (e: Exception) {
             e.printStackTrace()
