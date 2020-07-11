@@ -19,4 +19,4 @@ implementation("io.springfox:springfox-swagger-ui:2.6.1")
 - 프로젝트 디렉토리에서 "./gradlew bootjar" 명령어를 통하여 jar 배포 파일을 얻는다. 
 - 프로젝트 디렉토리/build/libs 에 있는 jar 파일을 아래의 명령어를 이용하여 실행한다. 
 - "java -jar [jar 파일명].jar" 
-- localhost:8080 에 접속하여 문서에 따라 API를 이용한다. 
+- http://localhost:8080/swagger-ui.html 에 접속하여 문서에 따라 API를 이용한다. 
