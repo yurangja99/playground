@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import kotlin.collections.HashMap
 
+@CrossOrigin(origins= ["http://localhost:3000"])
 @RestController
 class UserController {
     @Autowired
@@ -14,7 +15,6 @@ class UserController {
     // CREATE
 
     // 새로운 유저 생성
-    @CrossOrigin(origins= ["http://localhost:3000"])
     @PostMapping("/user")
     fun createUser(@RequestBody user: HashMap<String, Any>): HashMap<String, Any?> {
         return try {
@@ -38,7 +38,6 @@ class UserController {
     // READ
 
     // user DB 전체를 반환
-    @CrossOrigin(origins= ["http://localhost:3000"])
     @GetMapping("/db/user")
     fun readUserDB(): HashMap<String, Any?> {
         return try {
@@ -51,7 +50,6 @@ class UserController {
     }
 
     // 특정 유저 정보 열람
-    @CrossOrigin(origins= ["http://localhost:3000"])
     @GetMapping("/user")
     fun readUser(id: Int): HashMap<String, Any?> {
         return try {
@@ -67,7 +65,6 @@ class UserController {
 
     // 유저 정보 변경
     // state?, school?, grade?, class?, number?, name?, category?
-    @CrossOrigin(origins= ["http://localhost:3000"])
     @PatchMapping("/user")
     fun updateUser(id: Int, @RequestBody newUser: HashMap<String, Any>): HashMap<String, Any?> {
         return try {
@@ -94,7 +91,6 @@ class UserController {
     //DELETE
 
     // 기존의 유저 제거
-    @CrossOrigin(origins= ["http://localhost:3000"])
     @DeleteMapping("/user")
     fun deleteUser(id: Int): HashMap<String, Any?> {
         return try {

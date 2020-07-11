@@ -1,4 +1,4 @@
-# Initial Dependencies
+# 이 프로젝트의 초기 의존성
 - web
 - JPA
 - devtools
@@ -6,9 +6,10 @@
 - mysql driver
 
 # 테스트 방법
-- 로컬 MySQL 서버에 접속한 후, "show variables like 'datadir'" 명령어를 통하여 로컬 저장소 위치를 찾는다.  
-- MySQL Data 폴더 안에 있는 playground 폴더를 로컬 MySQL 저장소 위치로 옮긴다.
-- 프로젝트 디렉토리에서 "gradlew bootjar" 명령어를 통하여 jar 배포 파일을 얻는다. 
+- MySQL을 설치한 후, mysql -uroot -p 명령어를 통하여 접속이 되는지 확인한다.
+- 로컬 MySQL 서버에 접속한 후, show databases; 명령어롤 통해 playground 데이터베이스가 없다는 것을 확인한다.
+- playground 데이터베이스가 없음을 확인한 후, MySQL data/DB예시데이터.txt 속 쿼리들을 그대로 입력한다.
+- 프로젝트 디렉토리에서 "./gradlew bootjar" 명령어를 통하여 jar 배포 파일을 얻는다. 
 - 프로젝트 디렉토리/build/libs 에 있는 jar 파일을 아래의 명령어를 이용하여 실행한다. 
 - "java -jar [jar 파일명].jar" 
 - localhost:8080 에 접속하여 문서에 따라 API를 이용한다. 

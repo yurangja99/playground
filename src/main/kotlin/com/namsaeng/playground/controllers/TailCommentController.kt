@@ -5,6 +5,7 @@ import com.namsaeng.playground.repositories.TailCommentRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
+@CrossOrigin(origins= ["http://localhost:3000"])
 @RestController
 class TailCommentController {
     @Autowired
@@ -19,7 +20,6 @@ class TailCommentController {
     // CREATE
 
     // 새로운 답글 생성
-    @CrossOrigin(origins= ["http://localhost:3000"])
     @PostMapping("/tailcomment")
     fun createTailComment(@RequestBody tailcomment: HashMap<String, Any>): HashMap<String, Any?> {
         return try {
@@ -39,7 +39,6 @@ class TailCommentController {
     // READ
 
     // tail_comment DB 전체를 반환
-    @CrossOrigin(origins= ["http://localhost:3000"])
     @GetMapping("/db/tailcomment")
     fun readTailCommentDB(): HashMap<String, Any?> {
         return try {
@@ -52,7 +51,6 @@ class TailCommentController {
     }
 
     // 특정 답글 정보 열람
-    @CrossOrigin(origins= ["http://localhost:3000"])
     @GetMapping("/tailcomment")
     fun readTailComment(id: Long): HashMap<String, Any?> {
         return try {
@@ -68,7 +66,6 @@ class TailCommentController {
 
     // 답글 정보 변경
     // userId?, commentId?, content?
-    @CrossOrigin(origins= ["http://localhost:3000"])
     @PatchMapping("/tailcomment")
     fun updateTailComment(id: Long, @RequestBody newTailComment: HashMap<String, Any>): HashMap<String, Any?> {
         return try {
@@ -91,7 +88,6 @@ class TailCommentController {
     // DELETE
 
     // 기존의 답글 제거
-    @CrossOrigin(origins= ["http://localhost:3000"])
     @DeleteMapping("/tailcomment")
     fun deleteTailComment(id: Long): HashMap<String, Any?> {
         return try {
