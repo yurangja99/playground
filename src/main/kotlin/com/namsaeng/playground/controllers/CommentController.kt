@@ -1,6 +1,7 @@
 package com.namsaeng.playground.controllers
 
 import com.namsaeng.playground.entities.CommentEntity
+import com.namsaeng.playground.entities.TailCommentEntity
 import com.namsaeng.playground.repositories.CommentRepository
 import com.namsaeng.playground.repositories.TailCommentRepository
 import io.swagger.annotations.Api
@@ -66,18 +67,10 @@ class CommentController {
         return try{
             // 먼저 특정 주제에 달린 의견 댓글들을 찾고, 각 댓글에 대한 답글을 찾아 의견 댓글에 달아 둠.
             val commentsOfTopic: Iterable<CommentEntity> = commentRepository.findByTopicId(topicId)
-            val commentsAndTailComments: MutableList<HashMap<String, Any?>> = mutableListOf()
-            for (comment in commentsOfTopic) {
-                commentsAndTailComments.add(
-                        hashMapOf(
-                                Pair("userId", comment.userId),
-                                Pair("topicId", comment.topicId),
-                                Pair("like", comment.like),
-                                Pair("content", comment.content),
-                                Pair("modified", comment.modified),
-                                Pair("id", comment.id),
-                                Pair("tails", tailCommentRepository.findByCommentId(comment.id))))
-            }
+            val commentsAndTailComments: Iterable<HashMap<String, Any>> =
+                    commentsOfTopic.map {hashMapOf(
+                            Pair("comment", it),
+                            Pair("tails", tailCommentRepository.findByCommentId(it.id)))}
             return hashMapOf(Pair("data", commentsAndTailComments))
         } catch (e: Exception) {
             e.printStackTrace()
@@ -90,15 +83,19 @@ class CommentController {
     @GetMapping("/comment")
     fun readComment(id: Long): HashMap<String, Any?> {
         return try {
-            // 특정 id를 가진 레코드 혹은 null 반환
+            // 특정 id를 가진 레코드 혹은 null 반환. null이 아닐 경우 tail까지 구한다.
             val comment: CommentEntity? = commentRepository.findById(id).orElse(null)
-            hashMapOf(Pair("data", comment))
+            val tails: Iterable<TailCommentEntity> =
+                    if (comment == null)
+                        listOf()
+                    else
+                        tailCommentRepository.findByCommentId(comment.id)
+            hashMapOf(Pair("data", comment), Pair("tails", tails))
         } catch (e: Exception) {
             e.printStackTrace()
             hashMapOf(Pair("data", e.message))
         }
     }
-
 
     // UPDATE
 

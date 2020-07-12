@@ -91,6 +91,34 @@ class UserController {
         }
     }
 
+    // 아이디가 유일한지 확인
+    @ApiOperation(value="아이디 유일성 반환", notes="데이터베이스 안에서 아이디가 유일한지 판단합니다.")
+    @GetMapping("/login/unique")
+    fun isUnique(nickname: String): HashMap<String, Any?> {
+        return try {
+            // 특정 nickname 레코드를 가져온다. 없으면 유일, 있으면 중복.
+            val user: UserEntity? = userRepository.findByNickname(nickname)
+            hashMapOf(Pair("data", user == null))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            hashMapOf(Pair("data", e.message))
+        }
+    }
+
+    // 아이디/비밀번호를 통한 로그인
+    @ApiOperation(value="아이디/비번으로 로그인", notes="아이디/비밀번호를 받아 일치하는 레코드 혹은 null 반환")
+    @GetMapping("/login")
+    fun loginUser(nickname: String, password: String): HashMap<String, Any?> {
+        return try {
+            // 특정 nickname, password를 가진 레코드를 가져온다. 없으면 null
+            val user: UserEntity? = userRepository.findByNicknameAndPassword(nickname, password)
+            hashMapOf(Pair("data", user))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            hashMapOf(Pair("data", e.message))
+        }
+    }
+
     // UPDATE
 
     // 유저 정보 변경
