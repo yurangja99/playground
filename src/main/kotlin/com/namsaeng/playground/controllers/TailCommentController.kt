@@ -4,10 +4,13 @@ import com.namsaeng.playground.entities.TailCommentEntity
 import com.namsaeng.playground.repositories.TailCommentRepository
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import java.util.*
+import kotlin.collections.HashMap
 
-@Api(tags=["4. 답글"])
+@Api(tags=["4. 답글 DB"])
 @CrossOrigin(origins=["http://localhost:3000"])
 @RestController
 class TailCommentController {
@@ -25,14 +28,17 @@ class TailCommentController {
     // 새로운 답글 생성
     @ApiOperation(value="새 답글 추가", notes="새 답글을 데이터베이스에 추가합니다.")
     @PostMapping("/tailcomment")
-    fun createTailComment(@RequestBody tailcomment: HashMap<String, Any>): HashMap<String, Any?> {
+    fun createTailComment(
+            @ApiParam("userId, commentId, content") @RequestBody tailcomment: HashMap<String, Any>
+    ): HashMap<String, Any?> {
         return try {
-            val tailCommentAsTailCommentEntity = TailCommentEntity(
+            // 새로운 TailCommentEntity 인스턴스 선언 후, DB에 추가
+            val tailCommentAsTailCommentEntity: TailCommentEntity = TailCommentEntity(
                     tailcomment["userId"] as Int,
                     anyToLong(tailcomment["commentId"]),
                     tailcomment["content"] as String
             )
-            val resultOfSave = tailCommentRepository.save(tailCommentAsTailCommentEntity)
+            val resultOfSave: TailCommentEntity = tailCommentRepository.save(tailCommentAsTailCommentEntity)
             hashMapOf(Pair("data", resultOfSave))
         } catch (e: Exception) {
             e.printStackTrace()
@@ -47,6 +53,7 @@ class TailCommentController {
     @GetMapping("/db/tailcomment")
     fun readTailCommentDB(): HashMap<String, Any?> {
         return try {
+            // 데이터베이스의 모든 레코드 찾아서 반환.
             val allTailCommentRecords: Iterable<TailCommentEntity> = tailCommentRepository.findAll()
             hashMapOf(Pair("data", allTailCommentRecords))
         } catch (e: Exception) {
@@ -60,21 +67,9 @@ class TailCommentController {
     @GetMapping("/tailcomment")
     fun readTailComment(id: Long): HashMap<String, Any?> {
         return try {
-            val tailComment = tailCommentRepository.findById(id).orElse(null)
+            // 특정 id를 가진 레코드 혹은 null 반환
+            val tailComment: TailCommentEntity? = tailCommentRepository.findById(id).orElse(null)
             hashMapOf(Pair("data", tailComment))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            hashMapOf(Pair("data", e.message))
-        }
-    }
-
-    // 특정 의견 댓글의 답글 리스트 반환
-    @ApiOperation(value="특정 의견 댓글의 답글 리스트 반환", notes="특정 의견 댓글에 달린 답글의 리스트를 반환합니다.")
-    @GetMapping("/tailcomments")
-    fun readTailComments(commentId: Long): HashMap<String, Any?> {
-        return try{
-            val tailCommentsOfTopic = tailCommentRepository.findByCommentId(commentId)
-            return hashMapOf(Pair("data", tailCommentsOfTopic))
         } catch (e: Exception) {
             e.printStackTrace()
             hashMapOf(Pair("data", e.message))
@@ -87,13 +82,18 @@ class TailCommentController {
     // userId?, commentId?, content?
     @ApiOperation(value="특정 답글 정보 수정", notes="특정 답글 데이터를 수정하고, 수정된 데이터를 반환합니다.")
     @PatchMapping("/tailcomment")
-    fun updateTailComment(id: Long, @RequestBody newTailComment: HashMap<String, Any>): HashMap<String, Any?> {
+    fun updateTailComment(
+            id: Long,
+            @ApiParam("userId?, commentId?, content?") @RequestBody newTailComment: HashMap<String, Any>
+    ): HashMap<String, Any?> {
         return try {
-            val tailCommentWillBeUpdated = tailCommentRepository.findById(id).orElse(null)
+            // 주어진 id를 가진 레코드를 찾고, 각 필드가 존재하면, 변경한다.
+            val tailCommentWillBeUpdated: TailCommentEntity? = tailCommentRepository.findById(id).orElse(null)
             if (tailCommentWillBeUpdated != null) {
                 if (newTailComment["userId"] != null) tailCommentWillBeUpdated.userId = newTailComment["userId"] as Int
                 if (newTailComment["commentId"] != null) tailCommentWillBeUpdated.commentId = anyToLong(newTailComment["commentId"])
                 if (newTailComment["content"] != null) tailCommentWillBeUpdated.content = newTailComment["content"] as String
+                tailCommentWillBeUpdated.modified = Date()
                 tailCommentRepository.save(tailCommentWillBeUpdated)
                 hashMapOf(Pair("data", tailCommentWillBeUpdated))
             } else {
@@ -112,7 +112,8 @@ class TailCommentController {
     @DeleteMapping("/tailcomment")
     fun deleteTailComment(id: Long): HashMap<String, Any?> {
         return try {
-            val tailCommentWillBeDeleted = tailCommentRepository.findById(id).orElse(null)
+            // 주어진 id를 가진 레코드를 삭제한다.
+            val tailCommentWillBeDeleted: TailCommentEntity? = tailCommentRepository.findById(id).orElse(null)
             if (tailCommentWillBeDeleted != null) {
                 tailCommentRepository.delete(tailCommentWillBeDeleted)
                 hashMapOf(Pair("data", id))
